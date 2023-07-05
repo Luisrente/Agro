@@ -21,7 +21,7 @@ router.get('/', obtenerCategorias );
 
 // Obtener una categoria por id - publico
 router.get('/:id',[
-    check('id', 'No es un id de Mongo válido').isMongoId(),
+    check('id', 'No es un id de Mongdo válido').isMongoId(),
     check('id').custom( existeCategoriaPorId ),
     validarCampos,
 ], obtenerCategoria );
