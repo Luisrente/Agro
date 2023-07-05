@@ -15,7 +15,7 @@ class Server {
             buscar:     '/api/buscar',
             categorias: '/api/categorias',
             productos:  '/api/productos',
-            usuarios:   '/api/usuarios',
+            usuarios:   '/api/user',
             uploads:    '/api/uploads',
         }
 

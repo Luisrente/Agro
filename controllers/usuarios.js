@@ -1,6 +1,8 @@
 const { response, request } = require('express');
 const bcryptjs = require('bcryptjs');
 
+const jwt = require('jsonwebtoken');
+const { generarJWT } = require('../helpers/generar-jwt');
 
 const Usuario = require('../models/usuario');
 
@@ -22,6 +24,59 @@ const usuariosGet = async(req = request, res = response) => {
         total,
         usuarios
     });
+}
+
+const usuarioGet = async(req = request, res = response) => {
+
+   
+
+    try {
+        const tokend = req.header('x-token');
+
+        if ( !tokend ) {
+            return res.status(401).json({
+                msg: 'No hay token en la petición'
+            });
+        }
+        
+        const { uid } = jwt.verify( tokend, process.env.SECRETORPRIVATEKEY );
+
+        // leer el usuario que corresponde al uid
+        const usuario = await Usuario.findById( uid );
+
+        if( !usuario ) {
+            return res.status(401).json({
+                msg: 'Token no válido - usuario no existe DB'
+            })
+        }
+
+        // Verificar si el uid tiene estado true
+        if ( !usuario.estado ) {
+            return res.status(401).json({
+                msg: 'Token no válido - usuario con estado: false'
+            })
+        }
+
+        const token = await generarJWT( usuario.id );
+
+        res.json({
+            usuario,
+            token
+        })
+        
+        
+        
+
+    } catch (error) {
+
+        console.log(error);
+        res.status(401).json({
+            msg: 'Token no válido'
+        })
+    }
+
+
+   
 }
 
 const usuariosPost = async(req, res = response) => {
@@ -78,6 +133,7 @@ const usuariosDelete = async(req, res = response) => {
 module.exports = {
     usuariosGet,
     usuariosPost,
+    usuarioGet,
     usuariosPut,
     usuariosPatch,
     usuariosDelete,
