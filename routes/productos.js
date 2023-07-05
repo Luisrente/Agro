@@ -22,7 +22,7 @@ router.get('/', obtenerProductos );
 
 // Obtener una categoria por id - publico
 router.get('/:id',[
-    check('id', 'No es un id de Mongo válido').isMongoId(),
+    check('id', 'No es un id de Mongo válidof').isMongoId(),
     check('id').custom( existeProductoPorId ),
     validarCampos,
 ], obtenerProducto );
