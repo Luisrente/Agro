@@ -17,6 +17,7 @@ const cargarArchivo = async(req, res = response) => {
         
         // txt, md
         // const nombre = await subirArchivo( req.files, ['txt','md'], 'textos' );
+        
         const nombre = await subirArchivo( req.files, undefined, 'imgs' );
         res.json({ nombre });
 
